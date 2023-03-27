@@ -1,6 +1,7 @@
 use std::ops::Sub;
 
 use crate::model::point_2d::*;
+use crate::model::edge::*;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Triangle {
@@ -11,28 +12,29 @@ pub struct Triangle {
 
 impl Triangle {
     pub fn circumcircle_contains(&self, point: &Point2D) -> bool {
-        let ab = self.a - self.b;
-        let ac = self.a - self.c;
-        let det = 2.0 * (ab.x * ac.y - ab.y * ac.x);
+        let d = 2.0 * ((self.a.x - self.c.x) * (self.b.y - self.c.y) - (self.b.x - self.c.x) * (self.a.y - self.c.y));
 
-        let a_squared = self.a.x * self.a.x + self.a.y * self.a.y;
-        let b_squared = self.b.x * self.b.x + self.b.y * self.b.y;
-        let c_squared = self.c.x * self.c.x + self.c.y * self.c.y;
+        let ux = ((self.a.x.powi(2) - self.c.x.powi(2) + self.a.y.powi(2) - self.c.y.powi(2)) * (self.b.y - self.c.y)
+            - (self.b.x.powi(2) - self.c.x.powi(2) + self.b.y.powi(2) - self.c.y.powi(2)) * (self.a.y - self.c.y))
+            / d;
 
-        let u_x = (a_squared * (self.c.y - self.b.y)
-            + b_squared * (self.a.y - self.c.y)
-            + c_squared * (self.b.y - self.a.y))
-            / det;
-        let u_y = (a_squared * (self.b.x - self.c.x)
-            + b_squared * (self.c.x - self.a.x)
-            + c_squared * (self.a.x - self.b.x))
-            / det;
+        let uy = ((self.b.x - self.c.x) * (self.b.x.powi(2) - self.c.x.powi(2) + self.b.y.powi(2) - self.c.y.powi(2))
+            - (self.a.x - self.c.x) * (self.a.x.powi(2) - self.c.x.powi(2) + self.a.y.powi(2) - self.c.y.powi(2)))
+            / d;
 
-        let center = Point2D { x: u_x, y: u_y };
-        let radius_squared = (self.a.x - center.x).powi(2) + (self.a.y - center.y).powi(2);
-        let distance_squared = (point.x - center.x).powi(2) + (point.y - center.y).powi(2);
+        let center = Point2D { x: ux, y: uy };
+        let radius = (center.x - self.a.x).hypot(center.y - self.a.y);
 
-        distance_squared <= radius_squared
+        let distance = (center.x - point.x).hypot(center.y - point.y);
+        distance <= radius
+    }
+    
+    pub fn edges(&self) -> [Edge; 3] {
+        [
+            Edge { start: self.a, end: self.b },
+            Edge { start: self.b, end: self.c },
+            Edge { start: self.c, end: self.a },
+        ]
     }
 
     pub fn contains_edge(&self, edge: (Point2D, Point2D)) -> bool {
@@ -51,6 +53,10 @@ impl Triangle {
         let gamma = 1.0 - alpha - beta;
 
         alpha >= 0.0 && alpha <= 1.0 && beta >= 0.0 && beta <= 1.0 && gamma >= 0.0 && gamma <= 1.0
+    }
+
+    pub fn vertices(&self) -> [Point2D; 3] {
+        [self.a, self.b, self.c]
     }
 }
 
