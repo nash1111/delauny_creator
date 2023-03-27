@@ -41,7 +41,10 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
             // TODO
             // circumcircle_contains()が怪しい
             if triangle.circumcircle_contains(&point) {
+                println!("{:?} is in circumcircle of {:?}", point, triangle);
                 bad_triangles.push(*triangle);
+            } else {
+                println!("{:?} is not in circumcircle of {:?}", point, triangle)
             }
         }
 
