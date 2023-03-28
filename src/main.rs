@@ -13,8 +13,6 @@ fn main() {
         Point2D { x: 1.0, y: 0.0 },
         Point2D { x: 0.0, y: 1.0 },
         Point2D { x: 1.0, y: 1.0 },
-        Point2D { x: 1.0, y: 2.0 },
-        Point2D { x: 1.0, y: 3.0 },
     ];
     let res = bowyer_watson(points);
     dbg!(res);
