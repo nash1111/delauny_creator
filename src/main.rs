@@ -101,9 +101,12 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
         println!("triangulation {:?}", &triangulation);
         //println!("polygon {:?}", &polygon);
         i += 1;
-        if i == 1 {
-            panic!("stop");
-        }
+ //       if i == 1 {
+ //           let res = remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle());
+ //           println!("res {:?}", res);
+ //           panic!("stop");
+//
+ //       }
     }
 
     remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle())
