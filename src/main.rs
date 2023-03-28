@@ -21,9 +21,9 @@ fn main() {
 // ステップ1: スーパートライアングルを作成する関数
 fn create_super_triangle() -> Triangle {
     Triangle {
-        a: Point2D { x: -INFINITY, y: -INFINITY },
-        b: Point2D { x: INFINITY, y: -INFINITY },
-        c: Point2D { x: 0.0, y: INFINITY },
+        a: Point2D { x: -1000.0, y: -1000.0 },
+        b: Point2D { x: 1000.0, y: -1000.0 },
+        c: Point2D { x: 0.0, y: 1000.0 },
     }
 }
 
@@ -38,12 +38,22 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
         for triangle in &triangulation {
             // TODO
             // circumcircle_contains()が怪しい
-            if triangle.circumcircle_contains(&point) {
+            
+            //if triangle.circumcircle_contains(&point) {
+            //    println!("{:?} is in circumcircle of {:?}", point, triangle);
+            //    bad_triangles.push(*triangle);
+            //} else {
+            //    println!("{:?} is not in circumcircle of {:?}", point, triangle)
+            //}
+            let circumcircle = triangle.generate_circumcircle();
+            println!("{:?}", circumcircle);
+            if circumcircle.point_in_circle(&point) {
                 println!("{:?} is in circumcircle of {:?}", point, triangle);
                 bad_triangles.push(*triangle);
             } else {
                 println!("{:?} is not in circumcircle of {:?}", point, triangle)
             }
+
         }
 
         // find the boundary of the polygonal hole

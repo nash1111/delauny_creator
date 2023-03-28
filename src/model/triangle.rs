@@ -1,6 +1,7 @@
 use std::ops::Sub;
 
 use crate::model::point_2d::*;
+use crate::model::circle::*;
 use crate::model::edge::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -11,6 +12,25 @@ pub struct Triangle {
 }
 
 impl Triangle {
+    // TODO
+    // generate circumcircle
+    pub fn generate_circumcircle(&self) -> Circle {
+        let d = 2.0 * ((self.a.x - self.c.x) * (self.b.y - self.c.y) - (self.b.x - self.c.x) * (self.a.y - self.c.y));
+
+        let ux = ((self.a.x.powi(2) - self.c.x.powi(2) + self.a.y.powi(2) - self.c.y.powi(2)) * (self.b.y - self.c.y)
+            - (self.b.x.powi(2) - self.c.x.powi(2) + self.b.y.powi(2) - self.c.y.powi(2)) * (self.a.y - self.c.y))
+            / d;
+
+        let uy = ((self.b.x - self.c.x) * (self.b.x.powi(2) - self.c.x.powi(2) + self.b.y.powi(2) - self.c.y.powi(2))
+            - (self.a.x - self.c.x) * (self.a.x.powi(2) - self.c.x.powi(2) + self.a.y.powi(2) - self.c.y.powi(2)))
+            / d;
+
+        let center = Point2D { x: ux, y: uy };
+        let radius = (center.x - self.a.x).hypot(center.y - self.a.y);
+
+        Circle { center, radius }
+    }
+
     pub fn circumcircle_contains(&self, point: &Point2D) -> bool {
         let d = 2.0 * ((self.a.x - self.c.x) * (self.b.y - self.c.y) - (self.b.x - self.c.x) * (self.a.y - self.c.y));
 

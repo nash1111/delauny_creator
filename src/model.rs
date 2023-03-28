@@ -6,3 +6,6 @@ pub use triangle::Triangle;
 
 mod edge;
 pub use edge::Edge;
+
+mod circle;
+pub use circle::Circle;
