@@ -109,7 +109,11 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
  //       }
     }
 
-    remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle())
+    // 一個しか正解のTriangleなかった
+    // なんで？
+    //　しかしスーパートライアングルの除去だけはうまく行ってそう
+    triangulation
+    //remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle())
 }
 
 fn edge_is_shared_by_triangles(edge: &Edge, triangles: &Vec<Triangle>) -> bool {
