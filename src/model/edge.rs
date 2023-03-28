@@ -1,5 +1,6 @@
 use crate::model::point_2d::*;
 
+#[derive(Debug, Clone, Copy)]
 pub struct Edge {
     pub start: Point2D,
     pub end: Point2D,

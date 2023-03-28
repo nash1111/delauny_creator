@@ -21,22 +21,24 @@ fn main() {
 // ステップ1: スーパートライアングルを作成する関数
 fn create_super_triangle() -> Triangle {
     Triangle {
-        a: Point2D { x: -1000.0, y: -1000.0 },
-        b: Point2D { x: 1000.0, y: -1000.0 },
-        c: Point2D { x: 0.0, y: 1000.0 },
+        a: Point2D { x: -100.0, y: -100.0 },
+        b: Point2D { x: 100.0, y: -100.0 },
+        c: Point2D { x: 0.0, y: 100.0 },
     }
 }
 
 fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
     let mut triangulation:Vec<Triangle> = Vec::new();
-    // TODO
+
     // スーパートライアングルは無限使って良いのか？
     triangulation.push(create_super_triangle());
 
+    let mut i = 0;
     for point in points {
+        println!("index {:?}", i);
         let mut bad_triangles:Vec<Triangle> = Vec::new();
         for triangle in &triangulation {
-            // TODO
+            // 
             // circumcircle_contains()が怪しい
             
             //if triangle.circumcircle_contains(&point) {
@@ -60,40 +62,64 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
         let mut polygon:Vec<Edge> = Vec::new();
         for triangle in &bad_triangles {
             let edges = triangle.edges();
+            // bad_trianbles without triangle
+            let bad_triangles_without_triangle:Vec<Triangle> = bad_triangles.iter().filter(|t| t != &triangle).cloned().collect();
             for edge in edges {
-                if edge_is_not_shared_by_trianbles(&edge, &bad_triangles) {
+                println!("edge {:?}", edge);
+                println!("polygon {:?}", polygon);
+                // TODO
+                // FIX
+                // 他の三角だけを見に行く必要！！！
+                if !edge_is_shared_by_triangles(&edge, &bad_triangles_without_triangle) {
+                    println!("push! {:?} is not shared by bad triangles", edge);
                     polygon.push(edge);
+                } else {
+                    println!("no push! {:?} is shared by bad triangles", edge);
                 }
             }
         }
 
         // remove badTriangles from triangulation
-        // TODO retain 見直し
         for bad_triangle in &bad_triangles {
             triangulation.retain(|triangle| triangle != bad_triangle);
         }
 
-        for edge in polygon {
-            triangulation.push(retriangulate(&edge, &point));
+        // adding new triangles to the triangulation
+        for edge in &polygon {
+            let new_tri = retriangulate(&edge, &point);
+            dbg!(&new_tri);
+            triangulation.push(new_tri);
         }
+
+        // debug
+        println!("point {:?}", &point);
+        //println!("polygon {:?}", polygon);
+        for edge in &polygon {
+            println!("edge {:?}", edge);
+        }
+        println!("bad triangles {:?}", &bad_triangles);
+        println!("triangulation {:?}", &triangulation);
+        //println!("polygon {:?}", &polygon);
+        i += 1;
     }
+
     remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle())
 }
 
-fn edge_is_not_shared_by_trianbles(edge: &Edge, triangles: &Vec<Triangle>) -> bool {
+fn edge_is_shared_by_triangles(edge: &Edge, triangles: &Vec<Triangle>) -> bool {
     for triangle in triangles {
         let edges_of_triangle = triangle.edges();
         for edge_of_triangle in edges_of_triangle {
             if edge_of_triangle == *edge {
-                return false;
+                return true;
             }
             if edge_of_triangle.reverse() == *edge {
-                return false;
+                return true;
             }
         }
 
     }
-    true
+    false
 }
 
 // we need fn(triangle: &Triangle, point: &Point2D) -> Triangle
