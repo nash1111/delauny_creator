@@ -38,15 +38,6 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
         println!("index {:?}", i);
         let mut bad_triangles:Vec<Triangle> = Vec::new();
         for triangle in &triangulation {
-            // 
-            // circumcircle_contains()が怪しい
-            
-            //if triangle.circumcircle_contains(&point) {
-            //    println!("{:?} is in circumcircle of {:?}", point, triangle);
-            //    bad_triangles.push(*triangle);
-            //} else {
-            //    println!("{:?} is not in circumcircle of {:?}", point, triangle)
-            //}
             let circumcircle = triangle.generate_circumcircle();
             println!("{:?}", circumcircle);
             if circumcircle.point_in_circle(&point) {
@@ -57,13 +48,18 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
             }
 
         }
+        println!("bad triangles 51 {:?}", bad_triangles);
 
         // find the boundary of the polygonal hole
         let mut polygon:Vec<Edge> = Vec::new();
         for triangle in &bad_triangles {
             let edges = triangle.edges();
             // bad_trianbles without triangle
+            // TODO: ほんとに他の三角だけを見に行ってる？
+            println!("bad triangles {:?}", &bad_triangles);
+            println!("triangle {:?}", triangle);
             let bad_triangles_without_triangle:Vec<Triangle> = bad_triangles.iter().filter(|t| t != &triangle).cloned().collect();
+            println!("bad triangles without triangle {:?}", &bad_triangles_without_triangle);
             for edge in edges {
                 println!("edge {:?}", edge);
                 println!("polygon {:?}", polygon);
@@ -73,6 +69,7 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
                 if !edge_is_shared_by_triangles(&edge, &bad_triangles_without_triangle) {
                     println!("push! {:?} is not shared by bad triangles", edge);
                     polygon.push(edge);
+                    println!("polygon {:?}", polygon)
                 } else {
                     println!("no push! {:?} is shared by bad triangles", edge);
                 }
@@ -81,7 +78,9 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
 
         // remove badTriangles from triangulation
         for bad_triangle in &bad_triangles {
+            println!("-----start remove triangle {:?}", triangulation);
             triangulation.retain(|triangle| triangle != bad_triangle);
+            println!("-----end remove triangle {:?}", triangulation);
         }
 
         // adding new triangles to the triangulation
@@ -101,19 +100,20 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
         println!("triangulation {:?}", &triangulation);
         //println!("polygon {:?}", &polygon);
         i += 1;
- //       if i == 1 {
- //           let res = remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle());
- //           println!("res {:?}", res);
- //           panic!("stop");
+        if i == 4 {
+            let res = remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle());
+            println!("res {:?}", res);
+            println!("final polygon {:?}", &polygon);
+            panic!("stop");
 //
- //       }
+        }
     }
 
     // 一個しか正解のTriangleなかった
     // なんで？
     //　しかしスーパートライアングルの除去だけはうまく行ってそう
-    triangulation
-    //remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle())
+    //triangulation
+    remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle())
 }
 
 fn edge_is_shared_by_triangles(edge: &Edge, triangles: &Vec<Triangle>) -> bool {
