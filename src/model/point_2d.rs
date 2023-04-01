@@ -1,5 +1,5 @@
-use std::ops::{Add, Sub};
 use std::hash::{Hash, Hasher};
+use std::ops::{Add, Sub};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Point2D {

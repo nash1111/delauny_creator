@@ -9,12 +9,16 @@ pub struct Edge {
 // reverse edge
 impl Edge {
     pub fn reverse(&self) -> Edge {
-        Edge { start: self.end, end: self.start }
+        Edge {
+            start: self.end,
+            end: self.start,
+        }
     }
 }
 
 impl PartialEq for Edge {
     fn eq(&self, other: &Self) -> bool {
-        (self.start == other.start && self.end == other.end) || (self.start == other.end && self.end == other.start)
+        (self.start == other.start && self.end == other.end)
+            || (self.start == other.end && self.end == other.start)
     }
 }
