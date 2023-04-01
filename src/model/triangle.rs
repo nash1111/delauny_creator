@@ -40,19 +40,10 @@ impl Triangle {
         Point2D { x: ux, y: uy }
     }
 
-    fn distance(&self, p1: &Point2D, p2: &Point2D) -> f64 {
-        let dx = p1.x - p2.x;
-        let dy = p1.y - p2.y;
-        (dx * dx + dy * dy).sqrt()
-    }
-
     pub fn generate_circumcircle(&self) -> Circle {
-        let circumcenter = self.circumcenter();
-        let radius = self.distance(&circumcenter, &self.a);
-        Circle {
-            center: circumcenter,
-            radius,
-        }
+        let center = self.circumcenter();
+        let radius = center.distance(&self.a);
+        Circle { center, radius }
     }
 
     pub fn edges(&self) -> [Edge; 3] {
