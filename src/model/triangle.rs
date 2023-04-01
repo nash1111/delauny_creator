@@ -93,8 +93,3 @@ impl std::ops::Index<usize> for Triangle {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-}
