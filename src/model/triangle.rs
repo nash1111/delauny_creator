@@ -50,7 +50,7 @@ impl Triangle {
         (dx * dx + dy * dy).sqrt()
     }
 
-    pub fn generate_circumcircle_fin(&self) -> Circle {
+    pub fn generate_circumcircle(&self) -> Circle {
         let circumcenter = self.circumcenter();
         let radius = self.distance(&circumcenter, &self.a);
         Circle { center: circumcenter
@@ -101,28 +101,6 @@ impl Triangle {
     pub fn contains_edge(&self, edge: (Point2D, Point2D)) -> bool {
         let points = [self.a, self.b, self.c];
         points.contains(&edge.0) && points.contains(&edge.1)
-    }
-
-    pub fn contains_vertex(&self, point: Point2D) -> bool {
-        self.a == point || self.b == point || self.c == point
-    }
-
-    pub fn contains_point(&self, point: &Point2D) -> bool {
-        let det = (self.a.x * (self.b.y - self.c.y)
-            + self.b.x * (self.c.y - self.a.y)
-            + self.c.x * (self.a.y - self.b.y))
-            .abs();
-        let alpha = ((self.b.x * self.c.y - self.c.x * self.b.y)
-            + (self.c.y - self.b.y) * point.x
-            + (self.b.x - self.c.x) * point.y)
-            / det;
-        let beta = ((self.c.x * self.a.y - self.a.x * self.c.y)
-            + (self.a.y - self.c.y) * point.x
-            + (self.c.x - self.a.x) * point.y)
-            / det;
-        let gamma = 1.0 - alpha - beta;
-
-        alpha >= 0.0 && alpha <= 1.0 && beta >= 0.0 && beta <= 1.0 && gamma >= 0.0 && gamma <= 1.0
     }
 
     pub fn vertices(&self) -> [Point2D; 3] {
