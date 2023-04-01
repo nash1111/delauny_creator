@@ -1,9 +1,6 @@
-use std::ops::Sub;
-
 use crate::model::circle::*;
 use crate::model::edge::*;
 use crate::model::point_2d::*;
-use std::f64::consts::PI;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Triangle {
@@ -29,7 +26,7 @@ impl Triangle {
                 - (self.c.y * self.c.y))
                 * (self.a.y - self.c.y))
             / d;
-        
+
         let uy = (((self.b.x * self.b.x) + (self.b.y * self.b.y)
             - (self.c.x * self.c.x)
             - (self.c.y * self.c.y))
@@ -39,7 +36,6 @@ impl Triangle {
                 - (self.c.y * self.c.y))
                 * (self.b.x - self.c.x))
             / d;
-
 
         Point2D { x: ux, y: uy }
     }
@@ -53,32 +49,10 @@ impl Triangle {
     pub fn generate_circumcircle(&self) -> Circle {
         let circumcenter = self.circumcenter();
         let radius = self.distance(&circumcenter, &self.a);
-        Circle { center: circumcenter
-            , radius }
-    }
-
-    pub fn circumcircle_contains(&self, point: &Point2D) -> bool {
-        let d = 2.0
-            * ((self.a.x - self.c.x) * (self.b.y - self.c.y)
-                - (self.b.x - self.c.x) * (self.a.y - self.c.y));
-
-        let ux = ((self.a.x.powi(2) - self.c.x.powi(2) + self.a.y.powi(2) - self.c.y.powi(2))
-            * (self.b.y - self.c.y)
-            - (self.b.x.powi(2) - self.c.x.powi(2) + self.b.y.powi(2) - self.c.y.powi(2))
-                * (self.a.y - self.c.y))
-            / d;
-
-        let uy = ((self.b.x - self.c.x)
-            * (self.b.x.powi(2) - self.c.x.powi(2) + self.b.y.powi(2) - self.c.y.powi(2))
-            - (self.a.x - self.c.x)
-                * (self.a.x.powi(2) - self.c.x.powi(2) + self.a.y.powi(2) - self.c.y.powi(2)))
-            / d;
-
-        let center = Point2D { x: ux, y: uy };
-        let radius = (center.x - self.a.x).hypot(center.y - self.a.y);
-
-        let distance = (center.x - point.x).hypot(center.y - point.y);
-        distance <= radius
+        Circle {
+            center: circumcenter,
+            radius,
+        }
     }
 
     pub fn edges(&self) -> [Edge; 3] {
@@ -132,6 +106,4 @@ impl std::ops::Index<usize> for Triangle {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    
 }
