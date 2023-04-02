@@ -47,33 +47,39 @@ fn create_super_triangle(points: &Vec<Point2D>) -> Triangle {
     if points.is_empty() {
         panic!("The input points vector should not be empty.");
     }
-
-    let mut min_x = points[0].x;
-    let mut max_x = points[0].x;
-    let mut min_y = points[0].y;
-    let mut max_y = points[0].y;
+    let mut min_x = f64::MAX;
+    let mut min_y = f64::MAX;
+    let mut max_x = f64::MIN;
+    let mut max_y = f64::MIN;
 
     for point in points {
-        min_x = f64::min(min_x, point.x);
-        max_x = f64::max(max_x, point.x);
-        min_y = f64::min(min_y, point.y);
-        max_y = f64::max(max_y, point.y);
+        if point.x < min_x {
+            min_x = point.x;
+        }
+        if point.y < min_y {
+            min_y = point.y;
+        }
+        if point.x > max_x {
+            max_x = point.x;
+        }
+        if point.y > max_y {
+            max_y = point.y;
+        }
     }
 
-    let width = max_x - min_x;
-    let height = max_y - min_y;
+    let margin = 100.0;
 
     let a = Point2D {
-        x: min_x - height,
-        y: min_y - width,
+        x: min_x - margin,
+        y: min_y - margin,
     };
     let b = Point2D {
-        x: max_x + height,
-        y: min_y - width,
+        x: max_x + margin,
+        y: min_y - margin,
     };
     let c = Point2D {
-        x: min_x + 0.5 * width,
-        y: max_y + width,
+        x: (min_x + max_x) / 2.0,
+        y: max_y + margin,
     };
 
     Triangle { a, b, c }
