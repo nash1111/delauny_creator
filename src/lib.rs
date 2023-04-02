@@ -2,37 +2,10 @@ use model::{Edge, Point2D, Triangle};
 
 mod model;
 
-fn main() {
-    let points = vec![
-        Point2D { x: 0.0, y: 0.0 },
-        Point2D { x: 1.0, y: 0.0 },
-        Point2D { x: 0.0, y: 1.0 },
-        Point2D { x: 1.0, y: 1.0 },
-        //Point2D { x: 0.0, y: 2.0 },
-        //Point2D { x: 1.0, y: 2.0 },
-    ];
-    let res = bowyer_watson(points);
-    dbg!(res);
-}
-
-fn create_super_triangle() -> Triangle {
-    Triangle {
-        a: Point2D {
-            x: -100.0,
-            y: -100.0,
-        },
-        b: Point2D {
-            x: 100.0,
-            y: -100.0,
-        },
-        c: Point2D { x: 0.0, y: 100.0 },
-    }
-}
-
-fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
+pub fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
     let mut triangulation: Vec<Triangle> = Vec::new();
-
-    triangulation.push(create_super_triangle());
+    let super_triangle = create_super_triangle(&points);
+    triangulation.push(super_triangle);
 
     for point in points {
         let mut bad_triangles: Vec<Triangle> = Vec::new();
@@ -67,7 +40,43 @@ fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
             triangulation.push(new_tri);
         }
     }
-    remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &create_super_triangle())
+    remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &super_triangle)
+}
+
+fn create_super_triangle(points: &Vec<Point2D>) -> Triangle {
+    if points.is_empty() {
+        panic!("The input points vector should not be empty.");
+    }
+
+    let mut min_x = points[0].x;
+    let mut max_x = points[0].x;
+    let mut min_y = points[0].y;
+    let mut max_y = points[0].y;
+
+    for point in points {
+        min_x = f64::min(min_x, point.x);
+        max_x = f64::max(max_x, point.x);
+        min_y = f64::min(min_y, point.y);
+        max_y = f64::max(max_y, point.y);
+    }
+
+    let width = max_x - min_x;
+    let height = max_y - min_y;
+
+    let a = Point2D {
+        x: min_x - height,
+        y: min_y - width,
+    };
+    let b = Point2D {
+        x: max_x + height,
+        y: min_y - width,
+    };
+    let c = Point2D {
+        x: min_x + 0.5 * width,
+        y: max_y + width,
+    };
+
+    Triangle { a, b, c }
 }
 
 fn edge_is_shared_by_triangles(edge: &Edge, triangles: &Vec<Triangle>) -> bool {
@@ -85,8 +94,6 @@ fn edge_is_shared_by_triangles(edge: &Edge, triangles: &Vec<Triangle>) -> bool {
     false
 }
 
-// we need fn(triangle: &Triangle, point: &Point2D) -> Triangle
-// re-triangulate the polygonal hole
 fn retriangulate(edge: &Edge, point: &Point2D) -> Triangle {
     Triangle {
         a: edge.start,

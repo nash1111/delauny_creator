@@ -10,8 +10,6 @@ pub struct Triangle {
 }
 
 impl Triangle {
-    // TODO
-
     pub fn circumcenter(&self) -> Point2D {
         let d = 2.0
             * ((self.a.x - self.c.x) * (self.b.y - self.c.y)
@@ -78,18 +76,5 @@ impl PartialEq for Triangle {
         self.contains_edge((other.a, other.b))
             && self.contains_edge((other.b, other.c))
             && self.contains_edge((other.c, other.a))
-    }
-}
-
-impl std::ops::Index<usize> for Triangle {
-    type Output = Point2D;
-
-    fn index(&self, i: usize) -> &Self::Output {
-        match i {
-            0 => &self.a,
-            1 => &self.b,
-            2 => &self.c,
-            _ => panic!("Index out of bounds: {}", i),
-        }
     }
 }

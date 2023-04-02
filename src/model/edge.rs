@@ -6,7 +6,6 @@ pub struct Edge {
     pub end: Point2D,
 }
 
-// reverse edge
 impl Edge {
     pub fn reverse(&self) -> Edge {
         Edge {
