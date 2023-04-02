@@ -2,6 +2,6 @@
 name = "delaunay_creator"
 description = "delaunay triangulation for 2D and 3D(not implemented yet)"
 authors = ["nash1111 ken1251213@gmail.com"]
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 license-file = "LICENSE"
