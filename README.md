@@ -6,7 +6,7 @@ cd sample-project
 
 Edit Cargo.toml
 ```
-delaunay_creator = "0.2.2"
+delaunay_creator = "0.2.4"
 ```
 
 Edit src/main.rs
