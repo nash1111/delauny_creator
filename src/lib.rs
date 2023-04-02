@@ -1,4 +1,4 @@
-use model::{Edge, Point2D, Triangle};
+pub use model::{Edge, Point2D, Triangle};
 
 mod model;
 
