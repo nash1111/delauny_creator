@@ -5,3 +5,7 @@ authors = ["nash1111 ken1251213@gmail.com"]
 version = "0.2.4"
 edition = "2021"
 license-file = "LICENSE"
+
+[dev-dependencies]
+plotters = "0.3.3"
+rand = "0.8.5"

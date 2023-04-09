@@ -1,4 +1,19 @@
-Create sample-project
+#### Examples to see in the CLI:
+```
+cargo run --example simple_2d_triangulation
+```
+
+#### How to visualize by specifying the number of points:
+```
+cargo run --example 2d_plot 100
+```
+![100points](examples/delaunay_2d_100_points.png)
+![1000points](examples/delaunay_2d_1000_points.png)
+![10000points](examples/delaunay_2d_10000_points.png)
+![100000points](examples/delaunay_2d_100000_points.png)
+
+
+#### Create sample-project
 ```
 cargo new sample-project
 cd sample-project
