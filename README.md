@@ -13,7 +13,8 @@ cargo run --example 2d_plot 100
 ![100000points](examples/delaunay_2d_100000_points.png)
 
 
-#### Create sample-project
+#### or use this library on your project
+Create sample-project
 ```
 cargo new sample-project
 cd sample-project
