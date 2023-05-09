@@ -8,7 +8,12 @@ pub struct Circle {
 
 impl Circle {
     pub fn point_in_circle(&self, point: &Point2D) -> bool {
-        let squared_distance = self.center.distance_squared(point);
+        let squared_distance = {
+            let ref this = self.center;
+            let dx = this.x - point.x;
+            let dy = this.y - point.y;
+            dx * dx + dy * dy
+        };
         squared_distance <= (self.radius) * (self.radius)
     }
 }

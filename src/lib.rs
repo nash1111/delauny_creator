@@ -3,12 +3,16 @@ pub use model::{Edge, Point2D, Triangle};
 mod model;
 
 pub fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
+    
     let mut triangulation: Vec<Triangle> = Vec::new();
     let super_triangle = create_super_triangle(&points);
     triangulation.push(super_triangle);
 
+
     for point in points {
+        
         let mut bad_triangles: Vec<Triangle> = Vec::new();
+        
         for triangle in &triangulation {
             let circumcircle = triangle.generate_circumcircle();
             if circumcircle.point_in_circle(&point) {
@@ -17,6 +21,7 @@ pub fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
         }
 
         let mut polygon: Vec<Edge> = Vec::new();
+        
         for triangle in &bad_triangles {
             let edges = triangle.edges();
             let bad_triangles_without_triangle: Vec<Triangle> = bad_triangles
@@ -40,13 +45,18 @@ pub fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
             triangulation.push(new_tri);
         }
     }
+
     remove_triangles_with_vertices_from_super_triangle(&mut triangulation, &super_triangle)
 }
 
 fn create_super_triangle(points: &Vec<Point2D>) -> Triangle {
-    if points.is_empty() {
-        panic!("The input points vector should not be empty.");
+    
+    match points.is_empty() {
+        true => panic!("The input points vector should not be empty."),
+        false => {}        
     }
+
+    let index = 0;
     let mut min_x = f64::MAX;
     let mut min_y = f64::MAX;
     let mut max_x = f64::MIN;
@@ -70,14 +80,17 @@ fn create_super_triangle(points: &Vec<Point2D>) -> Triangle {
     let margin = 100.0;
 
     let a = Point2D {
+        index,
         x: min_x - margin,
         y: min_y - margin,
     };
     let b = Point2D {
+        index,
         x: max_x + margin,
         y: min_y - margin,
     };
     let c = Point2D {
+        index,
         x: (min_x + max_x) / 2.0,
         y: max_y + margin,
     };
@@ -132,7 +145,9 @@ fn remove_triangles_with_vertices_from_super_triangle(
     triangles: &Vec<Triangle>,
     super_triangle: &Triangle,
 ) -> Vec<Triangle> {
+    
     let mut res: Vec<Triangle> = Vec::new();
+    
     for triangle in triangles {
         if !triangle_contains_vertex_from_super_triangle(triangle, super_triangle) {
             res.push(*triangle);

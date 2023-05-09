@@ -35,7 +35,7 @@ impl Triangle {
                 * (self.b.x - self.c.x))
             / d;
 
-        Point2D { x: ux, y: uy }
+        Point2D { index: i64::MAX, x: ux, y: uy }
     }
 
     pub fn generate_circumcircle(&self) -> Circle {
