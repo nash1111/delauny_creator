@@ -1,10 +1,8 @@
-use core::num;
 use rand::distributions::Uniform;
 use std::collections::HashSet;
 use std::env;
 
 use plotters::prelude::*;
-use rand::seq::SliceRandom;
 use rand::Rng;
 
 fn triangle_to_vertices(triangle: &delaunay_creator::Triangle) -> Vec<(f64, f64)> {
@@ -36,7 +34,8 @@ fn create_random_points(length: usize) -> Vec<delaunay_creator::Point2D> {
     let range = Uniform::new(-2.0, 2.0);
 
     (0..length)
-        .map(|_| delaunay_creator::Point2D {
+        .map(|i| delaunay_creator::Point2D {
+            index: i as i64,
             x: rng.sample(range),
             y: rng.sample(range),
         })

@@ -1,5 +1,6 @@
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Point2D {
+    pub index: i64,
     pub x: f64,
     pub y: f64,
 }
