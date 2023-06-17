@@ -3,16 +3,13 @@ pub use model::{Edge, Point2D, Triangle};
 mod model;
 
 pub fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
-    
     let mut triangulation: Vec<Triangle> = Vec::new();
     let super_triangle = create_super_triangle(&points);
     triangulation.push(super_triangle);
 
-
     for point in points {
-        
         let mut bad_triangles: Vec<Triangle> = Vec::new();
-        
+
         for triangle in &triangulation {
             let circumcircle = triangle.generate_circumcircle();
             if circumcircle.point_in_circle(&point) {
@@ -21,7 +18,7 @@ pub fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
         }
 
         let mut polygon: Vec<Edge> = Vec::new();
-        
+
         for triangle in &bad_triangles {
             let edges = triangle.edges();
             let bad_triangles_without_triangle: Vec<Triangle> = bad_triangles
@@ -50,10 +47,9 @@ pub fn bowyer_watson(points: Vec<Point2D>) -> Vec<Triangle> {
 }
 
 fn create_super_triangle(points: &Vec<Point2D>) -> Triangle {
-    
     match points.is_empty() {
         true => panic!("The input points vector should not be empty."),
-        false => {}        
+        false => {}
     }
 
     let index = 0;
@@ -145,13 +141,45 @@ fn remove_triangles_with_vertices_from_super_triangle(
     triangles: &Vec<Triangle>,
     super_triangle: &Triangle,
 ) -> Vec<Triangle> {
-    
     let mut res: Vec<Triangle> = Vec::new();
-    
+
     for triangle in triangles {
         if !triangle_contains_vertex_from_super_triangle(triangle, super_triangle) {
             res.push(*triangle);
         }
     }
     res
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bowyer_watson() {
+        let square = vec![
+            Point2D {
+                x: 0.0,
+                y: 0.0,
+                index: 0,
+            },
+            Point2D {
+                x: 1.0,
+                y: 0.0,
+                index: 1,
+            },
+            Point2D {
+                x: 0.0,
+                y: 1.0,
+                index: 2,
+            },
+            Point2D {
+                x: 1.0,
+                y: 1.0,
+                index: 3,
+            },
+        ];
+        let result = bowyer_watson(square);
+        assert_eq!(result.len(), 2);
+    }
 }
