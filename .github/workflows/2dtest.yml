@@ -1,0 +1,29 @@
+name: 2dtest
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Rust toolchain
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: stable
+        components: rustfmt, clippy
+
+    - name: Check with cargo
+      run: cargo check
+
+    - name: Test with cargo
+      run: cargo test
+
+    - name: Cache dependencies
+      uses: Swatinem/rust-cache@v1
