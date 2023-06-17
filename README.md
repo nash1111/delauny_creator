@@ -1,3 +1,5 @@
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nash1111/delauny_creator/2dtest.yml?logo=github)
+
 #### Examples to see in the CLI:
 ```
 cargo run --example simple_2d_triangulation
